@@ -13,10 +13,10 @@
   <main>
     <article>
       <h1>MyNotes — スマホから疑問を即ノート化するシステム</h1>
-      <div class="date">2026-06-12</div>
+      <div class="date">2026-06-13</div>
       <div class="source">参考: <a href="https://zenn.dev/ttaniguchi/articles/instant-question-html-notes" target="_blank">スマホから疑問を投げたらHTMLノートが増えていく仕組みを作った — Zenn</a></div>
 
-      <p>技術的な疑問を、その場でAIに投げてHTMLページとして蓄積。</p>
+      <p>技術的な疑問を、その場でAIに投げてHTMLページとして蓄積。「スマホで調べる」から「スマホで資産化する」への体験シフトが目的。</p>
 
       <h2>なぜ作るのか</h2>
       <p>スマホで検索して調べた内容は「その場でわかった気になる」が、記憶に残りにくい。書き起こす手間を省く。</p>
@@ -25,53 +25,90 @@
 
       <figure>
         <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:sans-serif;font-size:13px;">
-          <!-- スマホ -->
-          <rect x="20" y="60" width="100" height="80" rx="8" fill="#e8f4fd" stroke="#378ADD" stroke-width="1.5"/>
-          <text x="70" y="96" text-anchor="middle" fill="#0C447C" font-weight="600">スマホ</text>
-          <text x="70" y="114" text-anchor="middle" fill="#185FA5" font-size="11">claude.ai</text>
-
-          <!-- 矢印1 -->
-          <line x1="122" y1="100" x2="178" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
-          <text x="150" y="92" text-anchor="middle" fill="#666" font-size="11">追加: ...</text>
-
-          <!-- Claude -->
-          <rect x="180" y="60" width="110" height="80" rx="8" fill="#f0ebfe" stroke="#7F77DD" stroke-width="1.5"/>
-          <text x="235" y="96" text-anchor="middle" fill="#3C3489" font-weight="600">Claude</text>
-          <text x="235" y="114" text-anchor="middle" fill="#534AB7" font-size="11">HTML生成</text>
-
-          <!-- 矢印2 -->
-          <line x1="292" y1="100" x2="348" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
-          <text x="320" y="92" text-anchor="middle" fill="#666" font-size="11">commit</text>
-
-          <!-- ユーザー確認 -->
-          <rect x="350" y="60" width="110" height="80" rx="8" fill="#fef3e2" stroke="#EF9F27" stroke-width="1.5"/>
-          <text x="405" y="90" text-anchor="middle" fill="#633806" font-weight="600">差分確認</text>
-          <text x="405" y="108" text-anchor="middle" fill="#854F0B" font-size="11">人間がレビュー</text>
-          <text x="405" y="124" text-anchor="middle" fill="#854F0B" font-size="11">→ git push</text>
-
-          <!-- 矢印3 -->
-          <line x1="462" y1="100" x2="518" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
-          <text x="490" y="92" text-anchor="middle" fill="#666" font-size="11">公開</text>
-
-          <!-- GitHub Pages -->
-          <rect x="520" y="60" width="100" height="80" rx="8" fill="#e6f5ee" stroke="#1D9E75" stroke-width="1.5"/>
-          <text x="570" y="96" text-anchor="middle" fill="#085041" font-weight="600">GitHub</text>
-          <text x="570" y="114" text-anchor="middle" fill="#0F6E56" font-size="11">Pages</text>
-
           <defs>
             <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
               <path d="M0,0 L0,6 L8,3 z" fill="#888"/>
             </marker>
           </defs>
+          <rect x="20" y="60" width="100" height="80" rx="8" fill="#e8f4fd" stroke="#378ADD" stroke-width="1.5"/>
+          <text x="70" y="96" text-anchor="middle" fill="#0C447C" font-weight="600">スマホ</text>
+          <text x="70" y="114" text-anchor="middle" fill="#185FA5" font-size="11">Claudeアプリ</text>
+
+          <line x1="122" y1="100" x2="178" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="150" y="92" text-anchor="middle" fill="#666" font-size="11">追加: ...</text>
+
+          <rect x="180" y="60" width="110" height="80" rx="8" fill="#f0ebfe" stroke="#7F77DD" stroke-width="1.5"/>
+          <text x="235" y="84" text-anchor="middle" fill="#3C3489" font-weight="600">PC</text>
+          <text x="235" y="102" text-anchor="middle" fill="#534AB7" font-size="11">Claude Code</text>
+          <text x="235" y="118" text-anchor="middle" fill="#534AB7" font-size="11">HTML生成</text>
+
+          <line x1="292" y1="100" x2="348" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="320" y="92" text-anchor="middle" fill="#666" font-size="11">commit</text>
+
+          <rect x="350" y="60" width="110" height="80" rx="8" fill="#fef3e2" stroke="#EF9F27" stroke-width="1.5"/>
+          <text x="405" y="90" text-anchor="middle" fill="#633806" font-weight="600">差分確認</text>
+          <text x="405" y="108" text-anchor="middle" fill="#854F0B" font-size="11">人間がレビュー</text>
+          <text x="405" y="124" text-anchor="middle" fill="#854F0B" font-size="11">→ git push</text>
+
+          <line x1="462" y1="100" x2="518" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="490" y="92" text-anchor="middle" fill="#666" font-size="11">公開</text>
+
+          <rect x="520" y="60" width="100" height="80" rx="8" fill="#e6f5ee" stroke="#1D9E75" stroke-width="1.5"/>
+          <text x="570" y="96" text-anchor="middle" fill="#085041" font-weight="600">GitHub</text>
+          <text x="570" y="114" text-anchor="middle" fill="#0F6E56" font-size="11">Pages</text>
         </svg>
         <figcaption>疑問の入力から公開までの流れ</figcaption>
       </figure>
 
+      <h2>スマホからの接続方法（remote-control）</h2>
+      <p>Claude Code の <code>remote-control</code> 機能でスマホのClaudeアプリからPCを直接操作できる。git操作を含めすべてスマホから完結する。</p>
+
+      <h3>PC側（操作前に起動しておく）</h3>
+      <pre><code>cd ~\source\repos\panzoux\mynotes\
+claude /login
+claude> remote-control</code></pre>
+
+      <h3>スマホ側</h3>
+      <ol style="line-height:1.9;padding-left:1.4rem;">
+        <li>Claudeアプリを開く</li>
+        <li>「リモートコントロールセッションに接続」を選択</li>
+        <li>PCに表示されたコードを入力して接続</li>
+        <li>あとは普通にチャット — PCのファイル操作・git操作がスマホから動く</li>
+      </ol>
+
+      <h2>ショートコマンド</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <thead>
+          <tr style="border-bottom:1px solid #ddd;">
+            <th style="text-align:left;padding:6px 8px;">入力</th>
+            <th style="text-align:left;padding:6px 8px;">動作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:6px 8px;"><code>追加: 〇〇とは</code></td>
+            <td style="padding:6px 8px;">ノート新規作成 → commit</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:6px 8px;"><code>追加 #タグ: 〇〇とは</code></td>
+            <td style="padding:6px 8px;">タグ指定付きで追加</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:6px 8px;"><code>一覧</code> / <code>list</code></td>
+            <td style="padding:6px 8px;">ノート一覧を表示</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 8px;"><code>編集: ノート名</code> / <code>edit: name</code></td>
+            <td style="padding:6px 8px;">指定ノートを編集</td>
+          </tr>
+        </tbody>
+      </table>
+
       <h2>技術スタック</h2>
       <ul style="line-height:1.9;padding-left:1.4rem;">
         <li><strong>フロントエンド:</strong> HTML / CSS / SVG のみ（ビルド不要）</li>
-        <li><strong>AI:</strong> Claude（このサイトの場合）/ 元記事は OpenAI Codex</li>
-        <li><strong>ホスティング:</strong> GitHub Pages（無料・静的ファイルをそのまま配信）</li>
+        <li><strong>AI:</strong> Claude Code（remote-control経由）</li>
+        <li><strong>ホスティング:</strong> GitHub Pages（無料）</li>
         <li><strong>バージョン管理:</strong> Git / GitHub</li>
       </ul>
 
@@ -91,15 +128,6 @@
         <li>JSON / YAML / ENV ファイルはコミット対象外</li>
         <li>参照元 URL を各ノートに必ず記載</li>
       </ul>
-
-      <h2>使い方（日常のフロー）</h2>
-      <ol style="line-height:1.9;padding-left:1.4rem;">
-        <li>スマホの claude.ai でプロジェクトを開く</li>
-        <li><code>追加: 〇〇とは</code> と送信</li>
-        <li>Claude がノートを生成・commit</li>
-        <li>PC で差分を確認して <code>git push</code></li>
-        <li>GitHub Pages に自動反映</li>
-      </ol>
     </article>
     <a class="back" href="../index.html">← 一覧に戻る</a>
   </main>
