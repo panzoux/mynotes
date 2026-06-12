@@ -17,9 +17,9 @@ Repo: https://github.com/panzoux/mynotes
 
 | 入力 | 動作 |
 |------|------|
-| `追加: Gitのrebaseとは` | ノート新規作成 → commit まで（push はユーザー確認後） |
-| `一覧` | 現在のノートファイル一覧を表示 |
-| `編集: sample` | 指定ノートを編集 |
+| `追加: Gitのrebaseとは` / `add: what is git rebase` | ノート新規作成 → commit まで（push はユーザー確認後） |
+| `一覧` / `list` | 現在のノートファイル一覧を表示 |
+| `編集: sample` / `edit: sample` | 指定ノートを編集 |
 
 ---
 
