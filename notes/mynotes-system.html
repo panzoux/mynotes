@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyNotes — スマホから疑問を即ノート化するシステム - My Notes</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="../index.html" style="text-decoration:none;color:inherit;">My Notes</a></h1>
+  </header>
+  <main>
+    <article>
+      <h1>MyNotes — スマホから疑問を即ノート化するシステム</h1>
+      <div class="date">2026-06-12</div>
+      <div class="source">参考: <a href="https://zenn.dev/ttaniguchi/articles/instant-question-html-notes" target="_blank">スマホから疑問を投げたらHTMLノートが増えていく仕組みを作った — Zenn</a></div>
+
+      <p>移動中や就寝前に浮かんだ技術的な疑問を、その場でAIに投げてHTMLページとして蓄積していく仕組み。「スマホで調べる」から「スマホで資産化する」への体験シフトが目的。</p>
+
+      <h2>なぜ作るのか</h2>
+      <p>スマホで検索して調べた内容は「その場でわかった気になる」が、後から記憶に残りにくい。ノートとして書き起こす手間が大きいため、日常の疑問が資産にならずに流れていく。このシステムはその摩擦をゼロにする。</p>
+
+      <h2>システム構成</h2>
+
+      <figure>
+        <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:sans-serif;font-size:13px;">
+          <!-- スマホ -->
+          <rect x="20" y="60" width="100" height="80" rx="8" fill="#e8f4fd" stroke="#378ADD" stroke-width="1.5"/>
+          <text x="70" y="96" text-anchor="middle" fill="#0C447C" font-weight="600">スマホ</text>
+          <text x="70" y="114" text-anchor="middle" fill="#185FA5" font-size="11">claude.ai</text>
+
+          <!-- 矢印1 -->
+          <line x1="122" y1="100" x2="178" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="150" y="92" text-anchor="middle" fill="#666" font-size="11">追加: ...</text>
+
+          <!-- Claude -->
+          <rect x="180" y="60" width="110" height="80" rx="8" fill="#f0ebfe" stroke="#7F77DD" stroke-width="1.5"/>
+          <text x="235" y="96" text-anchor="middle" fill="#3C3489" font-weight="600">Claude</text>
+          <text x="235" y="114" text-anchor="middle" fill="#534AB7" font-size="11">HTML生成</text>
+
+          <!-- 矢印2 -->
+          <line x1="292" y1="100" x2="348" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="320" y="92" text-anchor="middle" fill="#666" font-size="11">commit</text>
+
+          <!-- ユーザー確認 -->
+          <rect x="350" y="60" width="110" height="80" rx="8" fill="#fef3e2" stroke="#EF9F27" stroke-width="1.5"/>
+          <text x="405" y="90" text-anchor="middle" fill="#633806" font-weight="600">差分確認</text>
+          <text x="405" y="108" text-anchor="middle" fill="#854F0B" font-size="11">人間がレビュー</text>
+          <text x="405" y="124" text-anchor="middle" fill="#854F0B" font-size="11">→ git push</text>
+
+          <!-- 矢印3 -->
+          <line x1="462" y1="100" x2="518" y2="100" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="490" y="92" text-anchor="middle" fill="#666" font-size="11">公開</text>
+
+          <!-- GitHub Pages -->
+          <rect x="520" y="60" width="100" height="80" rx="8" fill="#e6f5ee" stroke="#1D9E75" stroke-width="1.5"/>
+          <text x="570" y="96" text-anchor="middle" fill="#085041" font-weight="600">GitHub</text>
+          <text x="570" y="114" text-anchor="middle" fill="#0F6E56" font-size="11">Pages</text>
+
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#888"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>疑問の入力から公開までの流れ</figcaption>
+      </figure>
+
+      <h2>技術スタック</h2>
+      <ul style="line-height:1.9;padding-left:1.4rem;">
+        <li><strong>フロントエンド:</strong> HTML / CSS / SVG のみ（ビルド不要）</li>
+        <li><strong>AI:</strong> Claude（このサイトの場合）/ 元記事は OpenAI Codex</li>
+        <li><strong>ホスティング:</strong> GitHub Pages（無料・静的ファイルをそのまま配信）</li>
+        <li><strong>バージョン管理:</strong> Git / GitHub</li>
+      </ul>
+
+      <h2>ディレクトリ構成</h2>
+      <pre><code>mynotes/
+├── index.html        ← 一覧ページ（タグフィルター付き）
+├── style.css
+├── CLAUDE.md         ← AIへの指示・ルール定義
+├── .gitignore        ← 秘匿ファイル除外
+└── notes/
+    └── *.html        ← 各ノート</code></pre>
+
+      <h2>ガードレール</h2>
+      <ul style="line-height:1.9;padding-left:1.4rem;">
+        <li>git push は必ず人間が差分を目視確認してから実行（AIは commit 止まり）</li>
+        <li>CLAUDE.md と .gitignore で秘匿情報を管理外に</li>
+        <li>JSON / YAML / ENV ファイルはコミット対象外</li>
+        <li>参照元 URL を各ノートに必ず記載</li>
+      </ul>
+
+      <h2>使い方（日常のフロー）</h2>
+      <ol style="line-height:1.9;padding-left:1.4rem;">
+        <li>スマホの claude.ai でプロジェクトを開く</li>
+        <li><code>追加: 〇〇とは</code> と送信</li>
+        <li>Claude がノートを生成・commit</li>
+        <li>PC で差分を確認して <code>git push</code></li>
+        <li>GitHub Pages に自動反映</li>
+      </ol>
+    </article>
+    <a class="back" href="../index.html">← 一覧に戻る</a>
+  </main>
+</body>
+</html>
