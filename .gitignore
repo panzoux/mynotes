@@ -1,0 +1,8 @@
+# 秘匿情報は Git 管理外
+*.json
+*.yaml
+*.yml
+*.env
+.env*
+secrets/
+private/

@@ -11,9 +11,46 @@
     <h1>My Notes</h1>
   </header>
   <main>
+    <div id="tag-filter"></div>
     <ul id="note-list">
-      <li><a href="notes/sample.html"><div class="title">サンプルノート</div><div class="date">2026-06-12</div></a></li>
+      <li data-tags="サンプル,使い方"><a href="notes/sample.html"><div class="title">サンプルノート</div><div class="date">2026-06-12</div><div class="tags"><span class="tag">サンプル</span><span class="tag">使い方</span></div></a></li>
     </ul>
   </main>
+  <script>
+    const list = document.getElementById('note-list');
+    const filterContainer = document.getElementById('tag-filter');
+
+    // 全タグ収集
+    const allTags = new Set();
+    list.querySelectorAll('li[data-tags]').forEach(li => {
+      li.dataset.tags.split(',').forEach(t => t && allTags.add(t.trim()));
+    });
+
+    // フィルターボタン生成
+    let active = null;
+    const allBtn = document.createElement('button');
+    allBtn.textContent = 'すべて';
+    allBtn.className = 'tag-btn active';
+    allBtn.onclick = () => setFilter(null, allBtn);
+    filterContainer.appendChild(allBtn);
+
+    allTags.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.textContent = tag;
+      btn.className = 'tag-btn';
+      btn.onclick = () => setFilter(tag, btn);
+      filterContainer.appendChild(btn);
+    });
+
+    function setFilter(tag, btn) {
+      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      list.querySelectorAll('li').forEach(li => {
+        if (!tag) { li.style.display = ''; return; }
+        const tags = (li.dataset.tags || '').split(',').map(t => t.trim());
+        li.style.display = tags.includes(tag) ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
