@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code開発者が使うベストプラクティス - My Notes</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="../index.html" style="text-decoration:none;color:inherit;">My Notes</a></h1>
+  </header>
+  <main>
+    <article>
+      <h1>Claude Code開発者が使うベストプラクティス</h1>
+      <div class="date">2026-06-13</div>
+
+      <p>
+        AnthropicのClaude Code開発者が実際に使っているプラクティスを構造化したファイル。
+        Workflow / Subagent / 自己改善ループ / 検証 / 自律バグ修正 の5本柱。
+      </p>
+
+      <h2>Workflow Orchestration</h2>
+
+      <h3>1. Plan Node Default — まず計画する</h3>
+      <ul>
+        <li>3ステップ以上 or 設計判断が絡むタスクは<strong>必ずPlanモードに入る</strong></li>
+        <li>詰まったら即停止して再計画。惰性で進めない</li>
+        <li>Planモードは「作るとき」だけでなく「検証ステップ」にも使う</li>
+        <li>曖昧さを減らすために<strong>詳細な仕様を事前に書く</strong></li>
+      </ul>
+
+      <h3>2. Subagent Strategy — サブエージェントを積極活用</h3>
+      <ul>
+        <li>メインのコンテキストウィンドウをクリーンに保つためにサブエージェントへ切り出す</li>
+        <li>調査・探索・並列分析はサブエージェントに任せる</li>
+        <li>複雑な問題にはより多くの計算をぶつける（サブエージェント増量）</li>
+        <li>1サブエージェント = 1タスク に絞って焦点を維持する</li>
+      </ul>
+
+      <h3>3. Self-Improvement Loop — 自己改善ループ</h3>
+      <ul>
+        <li>ユーザーから修正を受けたら<strong>毎回 <code>tasks/lessons.md</code> を更新する</strong></li>
+        <li>同じミスを再発させないルールを自分のために書く</li>
+        <li>ミス率が下がるまでlessonsを反復改善する</li>
+        <li>セッション開始時に関連lessonsをレビューする</li>
+      </ul>
+
+      <h3>4. Verification Before Done — 完了前に必ず検証</h3>
+      <ul>
+        <li>動作を証明せずにタスク完了とマークしない</li>
+        <li>必要に応じて main との差分動作を確認する</li>
+        <li>「スタッフエンジニアがこれをレビューして承認するか？」と自問する</li>
+        <li>テスト実行・ログ確認・正しさのデモンストレーション</li>
+      </ul>
+
+      <h3>5. Demand Elegance（バランス重視） — 洗練を求める</h3>
+      <ul>
+        <li>非trivialな変更では「もっとエレガントな方法はないか？」と立ち止まる</li>
+        <li>ハック感があるなら：「今知っていることすべてを踏まえて、エレガントな解を実装する」</li>
+        <li>シンプルで明白な修正にはスキップ — 過剰設計しない</li>
+        <li>提出前に自分自身の作業にチャレンジする</li>
+      </ul>
+
+      <h3>6. Autonomous Bug Fixing — 自律バグ修正</h3>
+      <ul>
+        <li>バグレポートを受けたら<strong>黙って修正する</strong>。やり方を聞かない</li>
+        <li>ログ・エラー・失敗テストを見て自己解決する</li>
+        <li>ユーザーのコンテキストスイッチをゼロにする</li>
+        <li>「どうすれば？」を聞かずに失敗CIテストを修正しに行く</li>
+      </ul>
+
+      <h2>Task Management の流れ</h2>
+      <ol>
+        <li><strong>Plan First</strong>：チェック可能な項目で <code>tasks/todo.md</code> に計画を書く</li>
+        <li><strong>Verify Plan</strong>：実装開始前に確認を取る</li>
+        <li><strong>Track Progress</strong>：進めながら完了項目をマークする</li>
+        <li><strong>Explain Changes</strong>：各ステップでハイレベルなサマリーを示す</li>
+        <li><strong>Document Results</strong>：<code>tasks/todo.md</code> にレビューセクションを追加する</li>
+        <li><strong>Capture Lessons</strong>：修正があれば <code>tasks/lessons.md</code> を更新する</li>
+      </ol>
+
+      <h2>Core Principles（3原則）</h2>
+      <table>
+        <thead>
+          <tr><th>原則</th><th>内容</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Simplicity First</td><td>変更はできる限りシンプルに。触るコードを最小限にする</td></tr>
+          <tr><td>No Laziness</td><td>根本原因を探る。一時的な修正はしない。シニア開発者の基準で</td></tr>
+          <tr><td>Minimal Impact</td><td>必要な箇所だけ変更。バグを持ち込まない</td></tr>
+        </tbody>
+      </table>
+
+      <h2>ポイントまとめ</h2>
+      <figure>
+        <figcaption>このプラクティスの核心は「自律性と自己改善」。ユーザーへの質問を最小化しながら、ミスから学び続けるループを回すことにある。</figcaption>
+      </figure>
+      <ul>
+        <li>聞かずに動く → バグ・CI・調査はすべて自己完結</li>
+        <li>失敗から学ぶ → lessons.md を育てることで長期的に品質が上がる</li>
+        <li>シンプルに保つ → 過剰設計より最小変更を優先</li>
+      </ul>
+    </article>
+    <a class="back" href="../index.html">← 一覧に戻る</a>
+  </main>
+</body>
+</html>
