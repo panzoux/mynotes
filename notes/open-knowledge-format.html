@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Knowledge Formatとは - My Notes</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="../index.html" style="text-decoration:none;color:inherit;">My Notes</a></h1>
+  </header>
+  <main>
+    <article>
+      <h1>Open Knowledge Format（OKF）とは</h1>
+      <div class="date">2026-06-13</div>
+      <div class="source">参考: <a href="https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing/?hl=en" target="_blank">Google Cloud Blog — How the Open Knowledge Format can improve data sharing</a></div>
+
+      <h2>一言でいうと</h2>
+      <p>
+        AIエージェントと人間が共通で読み書きできる、<strong>知識の共通言語（lingua franca）</strong>。
+        Google Cloudが提案したオープン・ベンダーニュートラルな仕様で、
+        Markdown + YAML frontmatter でデータの意味・文脈・文書を表現する。
+      </p>
+
+      <h2>解決したい問題</h2>
+      <p>企業内の知識は断片化している：</p>
+      <ul>
+        <li>メタデータカタログ（独自API）</li>
+        <li>Wiki・共有ドライブ・コードコメント</li>
+        <li>シニアエンジニアの頭の中</li>
+      </ul>
+      <p>
+        AIエージェントがこれらを活用しようとするたびに、スクラッチから集約し直す必要がある。
+        OKFはこのサイロ化を「フォーマットの標準化」で解消する。
+      </p>
+
+      <h2>ファイル構造</h2>
+      <p>ディレクトリ＋Markdownファイルの組み合わせ。</p>
+      <pre><code>sales/
+├── index.md
+├── datasets/
+│   └── orders_db.md
+├── tables/
+│   ├── orders.md
+│   └── customers.md
+└── metrics/
+    └── weekly_active_users.md</code></pre>
+
+      <h2>ドキュメントの形式</h2>
+      <p><strong>YAML frontmatter + Markdown本文</strong> のシンプルな構成。</p>
+      <pre><code>---
+type: BigQuery Table
+title: Orders
+description: One row per completed customer order.
+resource: https://console.cloud.google.com/bigquery?p=acme&d=sales&t=orders
+tags: [sales, revenue]
+timestamp: 2026-05-28T14:30:00Z
+---
+
+# Schema
+| Column      | Type   | Description                        |
+|-------------|--------|------------------------------------|
+| order_id    | STRING | Globally unique order identifier.  |
+| customer_id | STRING | FK to [customers](/tables/customers.md). |
+
+# Joins
+Joined with [customers](/tables/customers.md) on `customer_id`.</code></pre>
+
+      <h3>必須フィールドは <code>type</code> のみ</h3>
+      <p>残りは任意。これが「Minimally Opinionated（最小限の制約）」という設計原則。</p>
+
+      <h2>設計の3原則</h2>
+      <table>
+        <thead>
+          <tr><th>原則</th><th>内容</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Minimally Opinionated</td>
+            <td>必須は <code>type</code> のみ。残りは制作者が自由に決める</td>
+          </tr>
+          <tr>
+            <td>Producer / Consumer の独立</td>
+            <td>誰が書くかと誰が使うかは完全に分離。ツールは交換可能</td>
+          </tr>
+          <tr>
+            <td>プラットフォーム非依存</td>
+            <td>クラウド・DB・モデルプロバイダーに依存しない。SDK不要</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>なぜ「Just Markdown」か</h2>
+      <ul>
+        <li><strong>Just Markdown</strong> → あらゆるエディタで読める、GitHubでそのまま描画される</li>
+        <li><strong>Just Files</strong> → Gitで管理、tarball化、任意のファイルシステムで動く</li>
+        <li><strong>Just YAML frontmatter</strong> → <code>type</code> <code>title</code> <code>tags</code> などで機械的にクエリ可能</li>
+      </ul>
+      <p>特定ツールへのロックインが発生しない。</p>
+
+      <h2>典型的なユースケース</h2>
+      <table>
+        <thead>
+          <tr><th>ユースケース</th><th>流れ</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>メタデータ富化</td>
+            <td>BigQueryをスキャン → エージェントがOKFドキュメントを自動生成</td>
+          </tr>
+          <tr>
+            <td>チームのナレッジWiki</td>
+            <td>人間がcurate → エージェントが読み書き → index.mdで構造化</td>
+          </tr>
+          <tr>
+            <td>マルチエージェント協調</td>
+            <td>エージェントAが生成 → エージェントBが参照 → 人間が検証・更新</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>まとめ</h2>
+      <p>
+        OKFは「個々の組織がすでにやっている <em>markdown wiki for AI</em> パターン」を標準化・相互運用可能にする仕様。
+        AIが知識を使い回せるようにするための土台であり、
+        <strong>「何が真実か」を決める立法責任は相変わらず人間が持つ</strong>という前提の上に成り立つ。
+      </p>
+    </article>
+    <a class="back" href="../index.html">← 一覧に戻る</a>
+  </main>
+</body>
+</html>
