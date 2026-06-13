@@ -26,36 +26,40 @@
   <script>
     const list = document.getElementById('note-list');
     const filterContainer = document.getElementById('tag-filter');
+    const selected = new Set();
 
-    // 全タグ収集
     const allTags = new Set();
     list.querySelectorAll('li[data-tags]').forEach(li => {
       li.dataset.tags.split(',').forEach(t => t && allTags.add(t.trim()));
     });
 
-    // フィルターボタン生成
-    let active = null;
     const allBtn = document.createElement('button');
     allBtn.textContent = 'すべて';
     allBtn.className = 'tag-btn active';
-    allBtn.onclick = () => setFilter(null, allBtn);
+    allBtn.onclick = () => { selected.clear(); applyFilter(); };
     filterContainer.appendChild(allBtn);
 
     allTags.forEach(tag => {
       const btn = document.createElement('button');
       btn.textContent = tag;
       btn.className = 'tag-btn';
-      btn.onclick = () => setFilter(tag, btn);
+      btn.dataset.tag = tag;
+      btn.onclick = () => {
+        selected.has(tag) ? selected.delete(tag) : selected.add(tag);
+        applyFilter();
+      };
       filterContainer.appendChild(btn);
     });
 
-    function setFilter(tag, btn) {
-      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    function applyFilter() {
+      allBtn.classList.toggle('active', selected.size === 0);
+      filterContainer.querySelectorAll('[data-tag]').forEach(btn => {
+        btn.classList.toggle('active', selected.has(btn.dataset.tag));
+      });
       list.querySelectorAll('li').forEach(li => {
-        if (!tag) { li.style.display = ''; return; }
+        if (selected.size === 0) { li.style.display = ''; return; }
         const tags = (li.dataset.tags || '').split(',').map(t => t.trim());
-        li.style.display = tags.includes(tag) ? '' : 'none';
+        li.style.display = [...selected].every(t => tags.includes(t)) ? '' : 'none';
       });
     }
   </script>
