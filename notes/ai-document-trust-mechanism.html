@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI時代の文書信頼性問題と属性・仕組みの設計 - My Notes</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="../index.html" style="text-decoration:none;color:inherit;">My Notes</a></h1>
+  </header>
+  <main>
+    <article>
+      <h1>AI時代の文書信頼性問題と属性・仕組みの設計</h1>
+      <div class="date">2026-06-13</div>
+      <div class="source">参考: <a href="https://zenn.dev/acntechjp/articles/0cbfd0d7f636c0" target="_blank">Zenn — ACN Tech Blog</a></div>
+
+      <h2>問題の本質</h2>
+      <p>
+        AIが文書を大量生成できるようになったことで、<strong>「書いてある＝信頼できる」という暗黙のシグナルが消滅した。</strong><br>
+        以前は文書の量が少なく人間が選別できたが、今は量が選別能力を超え、存在自体がシグナルを発さなくなった。
+      </p>
+
+      <h2>二種類の病</h2>
+      <table>
+        <thead>
+          <tr><th>病名</th><th>症状</th><th>原因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>WIP病</strong></td>
+            <td>未承認の文書が「真」として扱われる</td>
+            <td>承認状態が機械可読な形で記録されていない</td>
+          </tr>
+          <tr>
+            <td><strong>腐敗病</strong></td>
+            <td>承認後も文書が現実と乖離したまま放置される</td>
+            <td>維持する仕組みがなく、自然に腐る</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>文書に必要な属性</h2>
+      <p>文書を生成した時点で、機械可読な形で付与すべきメタデータ：</p>
+      <pre><code>status:           approved / draft / 要再承認
+owner:            責任者（人名 or チーム）
+source_of_truth:  true / false
+last_validated_at: 最終検証日時
+depends_on:       [参照先のコード・仕様 etc.]</code></pre>
+      <p>
+        <code>source_of_truth: false</code> の文書は「参考情報」として扱い、意思決定の根拠にしない。
+        <code>depends_on</code> で参照先が変わったら自動的に <code>status: 要再承認</code> に落とす。
+      </p>
+
+      <h2>仕組みの構造（三権分立モデル）</h2>
+      <table>
+        <thead>
+          <tr><th>役割</th><th>担当フェーズ</th><th>内容</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>立法</strong>（上流）</td>
+            <td>承認できる粒度を決める</td>
+            <td>「何を1文書とするか」を人間が設計する</td>
+          </tr>
+          <tr>
+            <td><strong>採決</strong>（中流）</td>
+            <td>承認の儀式</td>
+            <td>レビュー・承認のプロセス実行</td>
+          </tr>
+          <tr>
+            <td><strong>司法</strong>（下流）</td>
+            <td>区分を検証・結線</td>
+            <td>依存関係の変化を検知して自動的に鮮度を落とす</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        差別化されるのは<strong>上流（粒度の設計）</strong>と<strong>下流（自動維持メカニズム）</strong>。
+        中流の採決はAIが補助できるが、立法責任は人間に残る。
+      </p>
+
+      <h2>核心的な制約</h2>
+      <p>
+        AIは「何を真とするか」の<strong>立法責任を担えない。</strong><br>
+        最後の引き受けは必ず人間に残る。
+        文書管理の設計とは、AIに任せる部分と人間が持つ部分を明確に切り分けることである。
+      </p>
+    </article>
+    <a class="back" href="../index.html">← 一覧に戻る</a>
+  </main>
+</body>
+</html>
